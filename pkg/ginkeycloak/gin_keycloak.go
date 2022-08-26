@@ -221,10 +221,10 @@ type KeycloakConfig struct {
 }
 
 func Auth(accessCheckFunction AccessCheckFunction, endpoints KeycloakConfig) gin.HandlerFunc {
-	return authChain(endpoints, accessCheckFunction)
+	return AuthChain(endpoints, accessCheckFunction)
 }
 
-func authChain(config KeycloakConfig, accessCheckFunctions ...AccessCheckFunction) gin.HandlerFunc {
+func AuthChain(config KeycloakConfig, accessCheckFunctions ...AccessCheckFunction) gin.HandlerFunc {
 	// middleware
 	return func(ctx *gin.Context) {
 		t := time.Now()
