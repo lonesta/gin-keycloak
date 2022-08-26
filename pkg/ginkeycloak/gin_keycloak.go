@@ -220,13 +220,17 @@ type KeycloakConfig struct {
 	FullCertsPath *string
 }
 
-func Auth(accessCheckFunction AccessCheckFunction, endpoints KeycloakConfig) gin.HandlerFunc {
-	return AuthChain(endpoints, accessCheckFunction)
+func Auth(accessCheckFunction AccessCheckFunction, endpoints KeycloakConfig, skipFunction func(ctx *gin.Context) bool) gin.HandlerFunc {
+	return AuthChain(endpoints, skipFunction, accessCheckFunction)
 }
 
-func AuthChain(config KeycloakConfig, accessCheckFunctions ...AccessCheckFunction) gin.HandlerFunc {
+func AuthChain(config KeycloakConfig, skipFunction func(ctx *gin.Context) bool, accessCheckFunctions ...AccessCheckFunction) gin.HandlerFunc {
 	// middleware
 	return func(ctx *gin.Context) {
+		if skipFunction(ctx) {
+			ctx.Next()
+		}
+
 		t := time.Now()
 		varianceControl := make(chan bool, 1)
 
