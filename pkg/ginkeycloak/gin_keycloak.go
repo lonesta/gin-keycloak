@@ -229,6 +229,7 @@ func AuthChain(config KeycloakConfig, skipFunction func(ctx *gin.Context) bool, 
 	return func(ctx *gin.Context) {
 		if skipFunction(ctx) {
 			ctx.Next()
+			return
 		}
 
 		t := time.Now()
