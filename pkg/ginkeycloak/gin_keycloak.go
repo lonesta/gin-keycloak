@@ -221,10 +221,10 @@ type KeycloakConfig struct {
 }
 
 func Auth(accessCheckFunction AccessCheckFunction, endpoints KeycloakConfig, skipFunction func(ctx *gin.Context) bool) gin.HandlerFunc {
-	return AuthChain(endpoints, skipFunction, accessCheckFunction)
+	return authChain(endpoints, skipFunction, accessCheckFunction)
 }
 
-func AuthChain(config KeycloakConfig, skipFunction func(ctx *gin.Context) bool, accessCheckFunctions ...AccessCheckFunction) gin.HandlerFunc {
+func authChain(config KeycloakConfig, skipFunction func(ctx *gin.Context) bool, accessCheckFunctions ...AccessCheckFunction) gin.HandlerFunc {
 	// middleware
 	return func(ctx *gin.Context) {
 		if skipFunction(ctx) {
